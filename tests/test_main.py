@@ -80,3 +80,18 @@ def test_committed_openapi_spec_is_up_to_date():
     """If this fails, run `make spec` and commit docs/openapi.json."""
     committed = json.loads((Path(__file__).parent.parent / "docs" / "openapi.json").read_text())
     assert committed == app.openapi()
+
+
+def test_v2_sqrt():
+    r = client.post("/v2/sqrt", json={"number": 144})
+    assert r.status_code == 200
+    assert r.json() == {"result": 12, "number": 144}
+
+
+def test_v2_sqrt_precision():
+    r = client.post("/v2/sqrt", json={"number": 2, "precision": 3})
+    assert r.json()["result"] == 1.414
+
+
+def test_v2_sqrt_rejects_negative():
+    assert client.post("/v2/sqrt", json={"number": -4}).status_code == 422
