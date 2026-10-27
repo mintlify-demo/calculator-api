@@ -1,0 +1,41 @@
+---
+title: Handling errors
+description: The status codes the Calculator API returns and how to handle them.
+icon: triangle-exclamation
+---
+
+## Status codes
+
+| Status | Meaning | When |
+| --- | --- | --- |
+| `200` | Success | The calculation worked |
+| `400` | Bad request | You divided by zero |
+| `422` | Validation error | A field is missing, the wrong type, or `operands` has fewer than two numbers |
+
+## Division by zero
+
+<Warning>
+  Dividing by zero returns a `400`, not a `500`. Handle it in your client.
+</Warning>
+
+<CodeGroup>
+  ```bash Request
+  curl -i -X POST http://localhost:8000/v1/divide \
+    -H "Content-Type: application/json" \
+    -d '{"a": 1, "b": 0}'
+  ```
+
+  ```json Response (400)
+  { "detail": "Cannot divide by zero" }
+  ```
+</CodeGroup>
+
+## Error response fields
+
+<ResponseField name="detail" type="string" required>
+  A human-readable message describing what went wrong.
+</ResponseField>
+
+<Note>
+  `422` responses use FastAPI's standard validation format: a `detail` array with the location and message for each invalid field.
+</Note>

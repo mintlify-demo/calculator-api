@@ -1,0 +1,33 @@
+---
+title: Calculator API
+description: Add, subtract, multiply and divide over HTTP, with a v1 and a v2 to compare.
+icon: calculator
+---
+
+The Calculator API does basic arithmetic. It's small on purpose, so the interesting part is how it's documented: two API versions, typed errors, and a playground on every endpoint.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" icon="rocket" href="/calculator-api/quickstart">
+    Run the API and add two numbers.
+  </Card>
+  <Card title="v1 vs v2" icon="code-compare" href="/calculator-api/guides/v1-vs-v2">
+    When to use each version.
+  </Card>
+  <Card title="Handling errors" icon="triangle-exclamation" href="/calculator-api/guides/errors">
+    What happens when you divide by zero.
+  </Card>
+  <Card title="Add two numbers" icon="plus" href="/calculator-api/api-reference/v1/add-two-numbers">
+    The simplest endpoint in the API.
+  </Card>
+</CardGroup>
+
+## Versions
+
+| Version | Shape | Use it when |
+| --- | --- | --- |
+| **v1** | `POST /v1/add`, `/v1/subtract`, `/v1/multiply`, `/v1/divide` with `{a, b}` | You have exactly two numbers |
+| **v2** | `POST /v2/calculate` with `{operation, operands}` | You have two or more numbers, or want one endpoint |
+
+<Note>
+  Both versions are supported. v1 is not deprecated.
+</Note>

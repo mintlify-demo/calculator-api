@@ -1,0 +1,71 @@
+---
+title: Quickstart
+description: Run the Calculator API locally and make your first calculation.
+icon: rocket
+---
+
+<Steps>
+  <Step title="Install and run">
+    ```bash
+    git clone https://github.com/mintlify-demo/calculator-api.git
+    cd calculator-api
+    python3 -m venv .venv && source .venv/bin/activate
+    pip install -r requirements.txt
+    uvicorn main:app --reload
+    ```
+  </Step>
+
+  <Step title="Add two numbers (v1)">
+    <CodeGroup>
+      ```bash cURL
+      curl -X POST http://localhost:8000/v1/add \
+        -H "Content-Type: application/json" \
+        -d '{"a": 12, "b": 4}'
+      ```
+
+      ```python Python
+      import requests
+
+      r = requests.post("http://localhost:8000/v1/add", json={"a": 12, "b": 4})
+      print(r.json())  # {'result': 16.0}
+      ```
+
+      ```javascript JavaScript
+      const res = await fetch("http://localhost:8000/v1/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ a: 12, b: 4 }),
+      });
+      console.log(await res.json()); // { result: 16 }
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Try v2">
+    Subtract several numbers in one call. The operation runs left to right.
+
+    ```bash
+    curl -X POST http://localhost:8000/v2/calculate \
+      -H "Content-Type: application/json" \
+      -d '{"operation": "subtract", "operands": [10, 3, 2]}'
+    ```
+
+    ```json
+    { "result": 5, "operation": "subtract", "operands": [10, 3, 2] }
+    ```
+  </Step>
+
+  <Step title="Break it on purpose">
+    ```bash
+    curl -i -X POST http://localhost:8000/v1/divide \
+      -H "Content-Type: application/json" \
+      -d '{"a": 1, "b": 0}'
+    ```
+
+    You get an HTTP `400` and `{"detail": "Cannot divide by zero"}`. See [handling errors](/calculator-api/guides/errors).
+  </Step>
+</Steps>
+
+<Tip>
+  Use the **Try it** playground on any [endpoint page](/calculator-api/api-reference/v2/calculate-with-any-operation) to send requests from your browser.
+</Tip>
