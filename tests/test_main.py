@@ -95,3 +95,10 @@ def test_v2_sqrt_precision():
 
 def test_v2_sqrt_rejects_negative():
     assert client.post("/v2/sqrt", json={"number": -4}).status_code == 422
+
+
+def test_v1_endpoints_are_marked_deprecated():
+    paths = app.openapi()["paths"]
+    for op in ["add", "subtract", "multiply", "divide"]:
+        assert paths[f"/v1/{op}"]["post"]["deprecated"] is True
+    assert "deprecated" not in paths["/v2/calculate"]["post"]
