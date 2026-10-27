@@ -135,17 +135,23 @@ DIVIDE_BY_ZERO = {400: {"model": ErrorResponse, "description": "Division (or mod
 
 app = FastAPI(
     title="Calculator API",
-    version="2.0.0",
+    version="2.1.0",
     summary="Add, subtract, multiply and divide over HTTP.",
     description=(
         "A small demo API for basic arithmetic.\n\n"
-        "**v1** has one endpoint per operation and takes exactly two numbers. "
+        "**v1** (deprecated, removed on 2027-01-31) has one endpoint per operation and takes exactly two numbers. "
         "**v2** adds `POST /v2/calculate`, which takes any operation (including `power` and `modulo`) and up to 20 numbers. "
         "Both versions return a `400` error when you divide by zero."
     ),
     servers=[{"url": "http://localhost:8000", "description": "Local development"}],
     openapi_tags=[
-        {"name": "v1", "description": "Original endpoints: one operation each, two numbers."},
+        {
+            "name": "v1",
+            "description": (
+                "**Deprecated.** Original endpoints: one operation each, two numbers. "
+                "Use `POST /v2/calculate` instead. v1 will be removed on 2027-01-31."
+            ),
+        },
         {"name": "v2", "description": "Newer endpoint: any operation, two or more numbers."},
     ],
 )
@@ -155,34 +161,59 @@ app = FastAPI(
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 
-@app.post("/v1/add", tags=["v1"], operation_id="v1Add", summary="Add two numbers", response_model=Result)
+@app.post(
+    "/v1/add",
+    tags=["v1"],
+    deprecated=True,
+    operation_id="v1Add",
+    summary="Add two numbers",
+    response_model=Result,
+)
 def v1_add(body: Operands) -> Result:
-    """Return `a + b`."""
+    """Return `a + b`. Deprecated: use `POST /v2/calculate` with `operation: add`."""
     return Result(result=add(body.a, body.b))
 
 
-@app.post("/v1/subtract", tags=["v1"], operation_id="v1Subtract", summary="Subtract two numbers", response_model=Result)
+@app.post(
+    "/v1/subtract",
+    tags=["v1"],
+    deprecated=True,
+    operation_id="v1Subtract",
+    summary="Subtract two numbers",
+    response_model=Result,
+)
 def v1_subtract(body: Operands) -> Result:
-    """Return `a - b`."""
+    """Return `a - b`. Deprecated: use `POST /v2/calculate` with `operation: subtract`."""
     return Result(result=subtract(body.a, body.b))
 
 
-@app.post("/v1/multiply", tags=["v1"], operation_id="v1Multiply", summary="Multiply two numbers", response_model=Result)
+@app.post(
+    "/v1/multiply",
+    tags=["v1"],
+    deprecated=True,
+    operation_id="v1Multiply",
+    summary="Multiply two numbers",
+    response_model=Result,
+)
 def v1_multiply(body: Operands) -> Result:
-    """Return `a * b`."""
+    """Return `a * b`. Deprecated: use `POST /v2/calculate` with `operation: multiply`."""
     return Result(result=multiply(body.a, body.b))
 
 
 @app.post(
     "/v1/divide",
     tags=["v1"],
+    deprecated=True,
     operation_id="v1Divide",
     summary="Divide two numbers",
     response_model=Result,
     responses=DIVIDE_BY_ZERO,
 )
 def v1_divide(body: Operands) -> Result:
-    """Return `a / b`. Returns a `400` error if `b` is `0`."""
+    """Return `a / b`. Returns a `400` error if `b` is `0`.
+
+    Deprecated: use `POST /v2/calculate` with `operation: divide`.
+    """
     return Result(result=safe_divide(body.a, body.b))
 
 
