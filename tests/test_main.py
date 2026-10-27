@@ -52,6 +52,22 @@ def test_v2_needs_two_operands():
     assert r.status_code == 422
 
 
+def test_v2_power_folds_left_to_right():
+    r = client.post("/v2/calculate", json={"operation": "power", "operands": [2, 3, 2]})
+    assert r.status_code == 200
+    assert r.json()["result"] == 64
+
+
+def test_v2_modulo():
+    r = client.post("/v2/calculate", json={"operation": "modulo", "operands": [17, 5]})
+    assert r.json()["result"] == 2
+
+
+def test_v2_modulo_by_zero_is_400():
+    r = client.post("/v2/calculate", json={"operation": "modulo", "operands": [17, 0]})
+    assert r.status_code == 400
+
+
 def test_v2_rejects_unknown_operation():
-    r = client.post("/v2/calculate", json={"operation": "power", "operands": [1, 2]})
+    r = client.post("/v2/calculate", json={"operation": "logarithm", "operands": [1, 2]})
     assert r.status_code == 422
