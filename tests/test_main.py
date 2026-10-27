@@ -71,3 +71,18 @@ def test_v2_modulo_by_zero_is_400():
 def test_v2_rejects_unknown_operation():
     r = client.post("/v2/calculate", json={"operation": "logarithm", "operands": [1, 2]})
     assert r.status_code == 422
+
+
+def test_v2_sqrt():
+    r = client.post("/v2/sqrt", json={"number": 144})
+    assert r.status_code == 200
+    assert r.json() == {"result": 12, "number": 144}
+
+
+def test_v2_sqrt_precision():
+    r = client.post("/v2/sqrt", json={"number": 2, "precision": 3})
+    assert r.json()["result"] == 1.414
+
+
+def test_v2_sqrt_rejects_negative():
+    assert client.post("/v2/sqrt", json={"number": -4}).status_code == 422
