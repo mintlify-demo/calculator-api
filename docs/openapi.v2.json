@@ -3,8 +3,8 @@
   "info": {
     "title": "Calculator API v2",
     "summary": "Add, subtract, multiply and divide over HTTP.",
-    "description": "A small demo API for basic arithmetic.\n\n**v1** has one endpoint per operation and takes exactly two numbers. **v2** adds `POST /v2/calculate`, which takes any operation (including `power` and `modulo`) and up to 20 numbers. Both versions return a `400` error when you divide by zero.",
-    "version": "2.0.0"
+    "description": "A small demo API for basic arithmetic.\n\n**v1** (deprecated, removed on 2027-01-31) has one endpoint per operation and takes exactly two numbers. **v2** adds `POST /v2/calculate`, which takes any operation (including `power` and `modulo`) and up to 20 numbers. Both versions return a `400` error when you divide by zero.",
+    "version": "2.1.0"
   },
   "servers": [
     {
