@@ -3,7 +3,7 @@
   "info": {
     "title": "Calculator API",
     "summary": "Add, subtract, multiply and divide over HTTP.",
-    "description": "A small demo API for basic arithmetic.\n\n**v1** has one endpoint per operation and takes exactly two numbers. **v2** adds `POST /v2/calculate`, which takes any operation and up to 20 numbers. Both versions return a `400` error when you divide by zero.",
+    "description": "A small demo API for basic arithmetic.\n\n**v1** has one endpoint per operation and takes exactly two numbers. **v2** adds `POST /v2/calculate`, which takes any operation (including `power` and `modulo`) and up to 20 numbers. Both versions return a `400` error when you divide by zero.",
     "version": "2.0.0"
   },
   "servers": [
@@ -169,7 +169,7 @@
             }
           },
           "400": {
-            "description": "Division by zero.",
+            "description": "Division (or modulo) by zero.",
             "content": {
               "application/json": {
                 "schema": {
@@ -197,7 +197,7 @@
           "v2"
         ],
         "summary": "Calculate with any operation",
-        "description": "Apply one operation across two or more numbers, left to right.\n\nDivision stops with a `400` error as soon as any divisor is `0`.",
+        "description": "Apply one operation across two or more numbers, left to right.\n\n`power` raises each result to the next number, so `[2, 3, 2]` is\n`(2 ** 3) ** 2 = 64`. `modulo` returns the remainder, so `[17, 5]` is `2`.\n\nDivision and modulo stop with a `400` error as soon as any divisor is `0`.",
         "operationId": "v2Calculate",
         "requestBody": {
           "content": {
@@ -221,7 +221,7 @@
             }
           },
           "400": {
-            "description": "Division by zero.",
+            "description": "Division (or modulo) by zero.",
             "content": {
               "application/json": {
                 "schema": {
@@ -385,7 +385,9 @@
           "add",
           "subtract",
           "multiply",
-          "divide"
+          "divide",
+          "power",
+          "modulo"
         ],
         "title": "Operation"
       },
