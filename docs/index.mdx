@@ -4,7 +4,7 @@ description: Add, subtract, multiply and divide over HTTP, with a v1 and a v2 to
 icon: calculator
 ---
 
-{user.name ? <>Welcome back, **{user.name}**.</> : null} The API reference is split by version: **v2 (Latest)** and **v1 (Legacy)**, each generated from its own spec (`openapi.v2.json` and `openapi.v1.json`).
+{user.name ? <>Welcome back, <strong>{user.name}</strong>{user.plan ? <> (<strong>{user.plan}</strong> plan)</> : null}.</> : null} The API reference is split by version: **v2 (Latest)** and **v1 (Legacy)**, each generated from its own spec (`openapi.v2.json` and `openapi.v1.json`).
 
 The Calculator API does basic arithmetic. It's small on purpose, so the interesting part is how it's documented: two API versions, typed errors, and a playground on every endpoint.
 
