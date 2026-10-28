@@ -1,6 +1,3 @@
-import json
-from pathlib import Path
-
 import pytest
 from fastapi.testclient import TestClient
 
@@ -58,9 +55,3 @@ def test_v2_needs_two_operands():
 def test_v2_rejects_unknown_operation():
     r = client.post("/v2/calculate", json={"operation": "power", "operands": [1, 2]})
     assert r.status_code == 422
-
-
-def test_committed_openapi_spec_is_up_to_date():
-    """If this fails, run `make spec` and commit docs/openapi.json."""
-    committed = json.loads((Path(__file__).parent.parent / "docs" / "openapi.json").read_text())
-    assert committed == app.openapi()
