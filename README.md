@@ -40,3 +40,17 @@ A test fails if the committed spec is out of date.
 ## Docs
 
 `docs/` is a complete Mintlify project. The central [`docs`](https://github.com/mintlify-demo/docs) repo publishes it at `/calculator-api`. Preview just this folder with `cd docs && mint dev`.
+
+## Hosting
+
+TODO(hosting): the API will be hosted with Mintlify's internal tooling (details TBD). Until then the OpenAPI `servers` list only `http://localhost:8000`. When the hosted URL exists, add it as the first entry of `servers=[...]` in `main.py`, run `make spec`, and rebase the demo stack (see the demo kit README).
+
+The docs split the API reference by version: **v2 (Latest)** is built from `docs/openapi.v2.json` and **v1 (Legacy)** from `docs/openapi.v1.json`. `make spec` writes both, plus the full `docs/openapi.json`. (A real version switcher needs a change in the base `docs` repo too, because a multi-repo source referenced from `pages` must define `navigation.pages`.)
+
+## Ticket → file map
+
+Context for Mintlify's *Update docs from tickets* automation (seed tickets: `linear-tickets.json` in the demo kit).
+
+| Ticket | What | Where |
+| --- | --- | --- |
+| DEMO-2 | `Sunset` and `Deprecation` headers on every v1 response | `main.py` (the `/v1/*` routes), `docs/v1/overview.mdx`, `docs/guides/v1-vs-v2.mdx` |

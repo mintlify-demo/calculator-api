@@ -1,0 +1,24 @@
+---
+title: v1 (Legacy) overview
+description: The original Calculator API, one endpoint per operation with exactly two numbers.
+icon: clock-rotate-left
+---
+
+You're reading the docs for **v1**, the original Calculator API. For `POST /v2/calculate`, see **API reference: v2 (Latest)**.
+
+| Endpoint | Body | Returns |
+| --- | --- | --- |
+| `POST /v1/add` | `{"a": 12, "b": 4}` | `{"result": 16}` |
+| `POST /v1/subtract` | `{"a": 12, "b": 4}` | `{"result": 8}` |
+| `POST /v1/multiply` | `{"a": 12, "b": 4}` | `{"result": 48}` |
+| `POST /v1/divide` | `{"a": 12, "b": 4}` | `{"result": 3}`, or `400` when `b` is `0` |
+
+```bash
+curl -X POST http://localhost:8000/v1/add \
+  -H "Content-Type: application/json" \
+  -d '{"a": 12, "b": 4}'
+```
+
+<Tip>
+  Moving to v2? See [v1 vs v2](/calculator-api/guides/v1-vs-v2) for the same calls side by side.
+</Tip>

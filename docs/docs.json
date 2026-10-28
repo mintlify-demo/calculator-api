@@ -26,13 +26,35 @@
         ]
       },
       {
-        "group": "API reference",
+        "group": "API reference: v2",
+        "tag": "Latest",
         "icon": "code",
         "openapi": {
-          "source": "openapi.json",
+          "source": "openapi.v2.json",
+          "directory": "api-reference"
+        }
+      },
+      {
+        "group": "API reference: v1",
+        "tag": "Legacy",
+        "icon": "clock-rotate-left",
+        "pages": [
+          "v1/overview"
+        ],
+        "openapi": {
+          "source": "openapi.v1.json",
           "directory": "api-reference"
         }
       }
     ]
+  },
+  "api": {
+    "playground": {
+      "display": "auth",
+      "proxy": false
+    },
+    "examples": {
+      "prefill": true
+    }
   }
 }
