@@ -7,6 +7,7 @@ It also tells a small versioning story:
 
 Run it:  uvicorn main:app --reload
 """
+import math
 from enum import Enum
 
 from fastapi import FastAPI, HTTPException
@@ -109,6 +110,19 @@ class CalculateResponse(Result):
     operands: list[float] = Field(..., description="The numbers that were used.", examples=[[10, 3, 2]])
 
 
+class SqrtRequest(BaseModel):
+    """A single number to take the square root of (v2)."""
+
+    number: float = Field(..., ge=0, description="The number. Must be zero or positive.", examples=[144])
+    precision: int = Field(
+        6, ge=0, le=15, description="How many decimal places to round the answer to.", examples=[2]
+    )
+
+
+class SqrtResponse(Result):
+    number: float = Field(..., description="The number you sent.", examples=[144])
+
+
 class ErrorResponse(BaseModel):
     detail: str = Field(..., description="What went wrong.", examples=["Cannot divide by zero"])
 
@@ -202,3 +216,19 @@ def v2_calculate(body: CalculateRequest) -> CalculateResponse:
     for number in body.operands[1:]:
         total = fn(total, number)
     return CalculateResponse(result=total, operation=body.operation, operands=body.operands)
+
+
+@app.post(
+    "/v2/sqrt",
+    tags=["v2"],
+    operation_id="v2Sqrt",
+    summary="Square root of a number",
+    response_model=SqrtResponse,
+)
+def v2_sqrt(body: SqrtRequest) -> SqrtResponse:
+    """Return the square root of `number`, rounded to `precision` decimal places.
+
+    Negative numbers are rejected with a `422` validation error, since they have
+    no real square root.
+    """
+    return SqrtResponse(result=round(math.sqrt(body.number), body.precision), number=body.number)
