@@ -52,6 +52,44 @@ def test_v2_needs_two_operands():
     assert r.status_code == 422
 
 
+def test_v2_power_folds_left_to_right():
+    r = client.post("/v2/calculate", json={"operation": "power", "operands": [2, 3, 2]})
+    assert r.status_code == 200
+    assert r.json()["result"] == 64
+
+
+def test_v2_modulo():
+    r = client.post("/v2/calculate", json={"operation": "modulo", "operands": [17, 5]})
+    assert r.json()["result"] == 2
+
+
+def test_v2_modulo_by_zero_is_400():
+    r = client.post("/v2/calculate", json={"operation": "modulo", "operands": [17, 0]})
+    assert r.status_code == 400
+
+
 def test_v2_rejects_unknown_operation():
-    r = client.post("/v2/calculate", json={"operation": "power", "operands": [1, 2]})
+    r = client.post("/v2/calculate", json={"operation": "logarithm", "operands": [1, 2]})
     assert r.status_code == 422
+
+
+def test_v2_sqrt():
+    r = client.post("/v2/sqrt", json={"number": 144})
+    assert r.status_code == 200
+    assert r.json() == {"result": 12, "number": 144}
+
+
+def test_v2_sqrt_precision():
+    r = client.post("/v2/sqrt", json={"number": 2, "precision": 3})
+    assert r.json()["result"] == 1.414
+
+
+def test_v2_sqrt_rejects_negative():
+    assert client.post("/v2/sqrt", json={"number": -4}).status_code == 422
+
+
+def test_v1_endpoints_are_marked_deprecated():
+    paths = app.openapi()["paths"]
+    for op in ["add", "subtract", "multiply", "divide"]:
+        assert paths[f"/v1/{op}"]["post"]["deprecated"] is True
+    assert "deprecated" not in paths["/v2/calculate"]["post"]
